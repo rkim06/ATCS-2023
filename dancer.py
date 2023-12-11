@@ -2,18 +2,34 @@ import pygame
 from fsm import FSM
 
 class Dancer(pygame.sprite.Sprite):
-    super().__init__()
+    
+    def __init__(self, game):
+        super().__init__()
 
-    self.game = game
+        self.game = game
 
-    # Load initial image
-    self.image = pygame.image.load("assets/images/bot.png")
-    self.rect = self.image.get_rect()
+        # Load initial image
+        self.image = pygame.image.load("assets/images/bot.png")
+        self.rect = self.image.get_rect()
 
-    self.fsm = FSM()
-    self.init_fsm()
-    self.STRONG, self.MILD, self.WEAK, self.OUT = 0, 1, 2, 3
-    self.state_transitions = {}   
+        self.fsm = FSM()
+        self.init_fsm()
+        self.STRONG, self.MILD, self.WEAK, self.OUT = 0, 1, 2, 3
+        self.state_transitions = {} 
+    
+        self.healthPoints = 0  
+        self.monthNum = 1
+
+        #initizalize the  images 
+        d1_food = pygame.image.load("images/d1_food.png")
+        d2_food = pygame.image.load("images/d2_food.png")
+        d3_food = pygame.image.load("images/d3_food.png")
+        d1_practice = pygame.image.load("images/d1_practice.png")
+        d2_practice = pygame.image.load("images/d2_practice.png")
+        d3_practice = pygame.image.load("images/d3_practice.png")
+
+        decisionTitle_img = pygame.image.load("images/decisionTitle.png")
+        teachFav_img = pygame.image.load("images/teachFav.png")
 
     def init_fsm(self):
         self.fsm.add_transitions(0, self.WEAK, self.changeOUT, self.OUT)
@@ -37,7 +53,10 @@ class Dancer(pygame.sprite.Sprite):
         # and displays image on screen?
 
     def changeWEAK(self):
+        pass
         
     def changeMILK(self):
+        pass
 
     def changeSTRONG(self):
+        pass
