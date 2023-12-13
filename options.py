@@ -2,15 +2,15 @@ import pygame
 import sys
 
 class Options(pygame.sprite.Sprite):
-    def __init__(self, game, x=, y=, image):
+    def __init__(self, screen, rect, image, x=100, y=300):
         super().__init__()
-
-        self.game = game
         self.image = image
+        self.screen = screen
+        self.rect = rect
+        self.x = x
+        self.y = y
 
-    #initizalize the  images (des- desicion, res- result)
-foodDes_img = pygame.image.load("images/getFood.png")
-practiceDes_img = pygame.image.load("images/getPractice.png")
-teachfavRes_img = pygame.image.load("images/teachFav.png")
-
-    def drawImg(self, image):
+    def drawImg(self):
+        self.screen.blit(self.image, (self.x, self.y))
+        
+    
