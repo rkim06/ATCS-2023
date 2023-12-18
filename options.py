@@ -7,10 +7,12 @@ class Options(pygame.sprite.Sprite):
         self.image = image
         self.screen = screen
         self.rect = rect
-        self.x = x
-        self.y = y
+        self.rect.topleft = (x, y)  # Update the position of the rectangle
 
     def drawImg(self):
-        self.screen.blit(self.image, (self.x, self.y))
+        self.screen.blit(self.image, self.rect.topleft)
+
+    # def drawImg(self):
+    #     self.screen.blit(self.image, (self.x, self.y))
         
     
