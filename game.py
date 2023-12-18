@@ -32,12 +32,12 @@ class Game:
         # Initialize the images
         self.d1_food = pygame.image.load("images/d1_food.png")
         self.d1_food = pygame.transform.scale(self.d1_food, (300, 200))
+        #self.d1_food = self.d1_food.resize((100, 250))
         self.d1_food_rect = self.d1_food.get_rect()
         
         self.d2_food = pygame.image.load("images/d2_food.png")
         self.d2_food = pygame.transform.scale(self.d2_food, (300, 200))
         self.d2_food_rect = self.d2_food.get_rect()
-        
         self.d3_food = pygame.image.load("images/d3_food.png")
         self.d3_food = pygame.transform.scale(self.d3_food, (300, 200))
         self.d3_food_rect = self.d3_food.get_rect()
@@ -47,10 +47,15 @@ class Game:
         self.d2_practice = pygame.image.load("images/d2_practice.png")
         self.d2_practice = pygame.transform.scale(self.d2_practice, (350, 200))
         self.d3_practice = pygame.image.load("images/d3_practice.png")
-        self.d1_practice = pygame.transform.scale(self.d3_practice, (350, 200))
+        self.d3_practice = pygame.transform.scale(self.d3_practice, (350, 200))
 
-        self.decisionTitle_img = pygame.image.load("images/decisionTitle.png")
-        self.teachFav_img = pygame.image.load("images/teachFav.png")
+        self.resultWEAK = pygame.image.load("images/resultWEAK.png")
+        self.resultREG = pygame.image.load("images/resultREG.png")
+        self.resultSTRONG = pygame.image.load("images/resultSTRONG.png")
+
+        self.finalweak = pygame.image.load("images/finalWEAK.png")
+        self.finalREG = pygame.image.load("images/finalREG.png")
+        self.finalSTRONG = pygame.image.load("images/finalSTRONG.png")
 
     def run(self):
         # Main game loop
@@ -81,12 +86,25 @@ class Game:
         # Quit Pygame
         pygame.quit()
     
+    def drawResult(self, image):
+        self.image = pygame.image.load("images/"+image+".png")
+    
     def check_image_click(self, mouse_pos):
-        # Check if any image was clicked
         if self.food_option1.rect.collidepoint(mouse_pos):
-            #display message
-            self.dancer.change_healthPoints(2)
-            print(self.dancer.healthPoints)
+            self.dancer.change_healthPoints(1)
+            print("Health points: ", self.dancer.healthPoints)
+        elif self.food_option2.rect.collidepoint(mouse_pos):
+            self.dancer.change_healthPoints(-1)
+            print("Health points: ", self.dancer.healthPoints)
+        elif self.food_option3.rect.collidepoint(mouse_pos):
+            self.dancer.change_healthPoints(1)
+
+        if self.d1_practice.rect.collidepoint(mouse_pos):
+            self.dancer.change_healthPoints(1)
+        elif self.d2_practice.rect.collidepoint(mouse_pos):
+            self.dancer.change_healthPoints(-1)
+        elif self.d3_practice.rect.collidepoint(mouse_pos):
+            self.dancer.change_healthPoints(1)
             
 
 if __name__ == "__main__":

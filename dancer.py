@@ -1,36 +1,42 @@
 import pygame
 from fsm import FSM
+from game import Game
 
 class Dancer(pygame.sprite.Sprite):
     
     def __init__(self):
         super().__init__()
 
-        # Load initial image 
-        # ADDED try and except
         try:
             self.image = pygame.image.load("assets/images/bot.png")
         except FileNotFoundError:
             print("Error: The image file for the dancer bot was not found.")
         
-        self.fsm = FSM()
+        self.STRONG, self.REG, self.WEAK, self.OUT = 0, 1, 2, 3
+        self.fsm = FSM(self.REG)
         self.init_fsm()
-        self.STRONG, self.MILD, self.WEAK, self.OUT = 0, 1, 2, 3
         self.state_transitions = {} 
         self.healthPoints = 0  
         self.monthNum = 1
 
     def init_fsm(self):
-        self.fsm.add_transitions(0, self.WEAK, self.changeOUT, self.OUT)
-        #should this be 5 or 6
-        self.fsm.add_transitions(6, self.WEAK, self.changeMILD, self.MILD)
+        self.fsm.add_transition(1, self.WEAK, -1, self.changeLOSE, self.OUT)
+        self.fsm.add_transition(1, self.WEAK, 1, self.changeWEAK, self.WEAK)
+        
+        self.fsm.add_transition(2, self.WEAK, -1, self.changeWEAK, self.WEAK)
+        self.fsm.add_transition(2, self.WEAK, 1, self.changeREG, self.REG)
 
-        #should this be 5 or 6
-        self.fsm.add_transitions(5, self.MILD, self.changeWEAK, self.WEAK)
-        self.fsm.add_transitions(10, self.MILD, self.changeSTRONG, self.STRONG)
+        self.fsm.add_transition(3, self.REG, -1, self.changeWEAK, self.WEAK)
+        self.fsm.add_transition(3, self.REG, 1, self.changeREG, self.REG)
 
-        self.fsm.add_transitions(9, self.STRONG, self.changeMILD, self.MILD)
-        self.fsm.add_transitions(15, self.STRONG, self.staySTRONG, self.STRONG)     
+        self.fsm.add_transition(4, self.REG, -1, self.changeREG, self.WEAK)
+        self.fsm.add_transition(4, self.REG, 1, self.changeSTRONG, self.REG)
+             
+        self.fsm.add_transition(5, self.STRONG, -1, self.changeREG, self.WEAK)
+        self.fsm.add_transition(5, self.STRONG, 1, self.changeSTRONG, self.REG)
+
+        self.fsm.add_transition(6, self.STRONG, -1, self.changeSTRONG, self.WEAK)
+        self.fsm.add_transition(6, self.STRONG, 1, self.changeSTRONG, self.REG)
 
     def get_state(self):
         return self.fsm.current_state
@@ -39,17 +45,19 @@ class Dancer(pygame.sprite.Sprite):
         self.healthPoints += value
         return self.healthPoints
     
-    def changeOUT(self):
-        pygame.quit()
-
-        #quits the game ("you had to quite dance because it was too hard on mental and physical health")
-        # and displays image on screen?
-
     def changeWEAK(self):
+        Game.drawResult("resultWEAK")
         pass
         
-    def changeMILD(self):
+    def changeREG(self):
+        Game.drawResult("resultREG")
         pass
 
     def changeSTRONG(self):
+        Game.drawResult("resultSTRONG")
         pass
+
+    def changeLOSE(self):
+        Game.drawResult("finalWEAK")
+        exit
+
