@@ -1,4 +1,3 @@
-
 import pygame
 from options import Options
 from dancer import Dancer
@@ -32,16 +31,6 @@ class Game:
 
 
     def init_images(self):
-        # # Initialize the images
-        # self.d1_food = pygame.image.load("images/d1_food.png")
-        # self.d1_food = pygame.transform.scale(self.d1_food, (300, 200))
-        # #self.d1_food = self.d1_food.resize((100, 250))
-        # self.d1_food_rect = self.d1_food.get_rect()
-        # self.d1_food = pygame.image.load("images/d1_food.png").convert_alpha()
-        # self.d1_food = self.d1_food.resize(100, 250)
-        # rect_foodD1 = self.d1_food.get_rect()
-        # rect_foodD1.center = (450, 200)
-
     # Load and scale images, and initialize their rects
         self.d1_food = pygame.image.load("images/d1_food.png").convert_alpha()
         self.d1_food = pygame.transform.scale(self.d1_food, (300, 200))
@@ -56,27 +45,18 @@ class Game:
         self.d3_food_rect = self.d3_food.get_rect()
 
         #make the following below similar 
-        
-        # self.d2_food = pygame.image.load("images/d2_food.png")
-        # self.d2_food = pygame.transform.scale(self.d2_food, (300, 200))
-        # self.d2_food_rect = self.d2_food.get_rect()
-        # self.d2_food = pygame.image.load("images/d2_food.png").convert_alpha()
-        # rect_foodD2 = self.d2_food.get_rect()
-        # rect_foodD2.center = (450, 400)
-
-        # self.d3_food = pygame.image.load("images/d3_food.png")
-        # self.d3_food = pygame.transform.scale(self.d3_food, (300, 200))
-        # self.d3_food_rect = self.d3_food.get_rect()
-        # self.d3_food = pygame.image.load("images/d3_food.png").convert_alpha()
-        # rect_foodD3 = self.d3_food.get_rect()
-        # rect_foodD3.center = (450, 600)
 
         self.d1_practice = pygame.image.load("images/d1_practice.png")
         self.d1_practice = pygame.transform.scale(self.d1_practice, (350, 200))
+        self.d1_practice_rect = self.d1_practice.get_rect()
+
         self.d2_practice = pygame.image.load("images/d2_practice.png")
         self.d2_practice = pygame.transform.scale(self.d2_practice, (350, 200))
+        self.d2_practice_rect = self.d2_practice.get_rect()
+
         self.d3_practice = pygame.image.load("images/d3_practice.png")
         self.d3_practice = pygame.transform.scale(self.d3_practice, (350, 200))
+        self.d3_practice_rect = self.d3_practice.get_rect()
 
         self.resultWEAK = pygame.image.load("images/resultWEAK.png")
         self.resultREG = pygame.image.load("images/resultREG.png")
@@ -104,9 +84,20 @@ class Game:
                     if event.button == 1:  # Left mouse button
                         self.check_image_click(event.pos)
                         self.dancer.fsm.process(self.dancer.get_healthPoints())
-                        #manually changed the state to weak for the demo
+
+                        #manually changed the state to weak for the demo purpose
                         self.game_state = "weak"
-                        #self.screen.fill(self.LPINK)
+
+                        # After processing the FSM, update the game state. Not shown for demo as I couldn't get it to work
+                        # current_dancer_state = self.dancer.get_state()
+                        # if current_dancer_state <0:
+                        #     self.game_state = "out"
+                        # elif current_dancer_state <= 1:
+                        #     self.game_state = "weak"
+                        # elif current_dancer_state <= 3:
+                        #     self.game_state = "reg"
+                        # elif current_dancer_state <= 5:
+                        #     self.game_state = "strong"
 
 
             # Clear the screen
@@ -121,19 +112,62 @@ class Game:
                 self.food_option2.drawImg()
                 self.food_option3 = Options(self.screen, self.d3_food_rect, self.d3_food, 450, 300)
                 self.food_option3.drawImg()
+
             elif self.game_state == "weak":
-                # Draw weak state image
+                # Prints weak state image, hard coded for demo
                 print("CURRENT STATE IS WEAK")
                 self.weak_option.drawImg()
-                # self.dancer.changeWEAK()
-            # Add other states as needed
+                # self.dancer.changeWEAK() is the correct code, but commented out for demo 
 
+            # Other states not shown in demo
+            # elif self.game_state == "practices":
+            #     # Draw options for different practice choices, same as food options but for the practice options
+            #     self.practice_option1 = Options(self.screen, self.d1_practice_rect, self.d1_practice, 50, 300)
+            #     self.practice_option1.drawImg()
+            #     self.practice_option2 = Options(self.screen, self.d2_practice_rect, self.d2_practice, 50, 300)
+            #     self.practice_option2.drawImg()
+            #     self.practice_option3 = Options(self.screen, self.d3_practice_rect, self.d3_practice, 50, 300)
+            #     self.practice_option3.drawImg()
+            # elif self.game_state == "reg":
+            #     # Prints regular state image
+            #     self.dancer.changeREG()
+
+            # elif self.game_state == "strong":
+            #     # Prints strong state image
+            #     self.dancer.changeSTRONG()
+            
+            # elif self.game_state == "out":
+            #     # Prints losing state image and ends the game
+            #     print("Your health has run out and the game is over.")
+            #     self.dancer.changeLOSE()
+
+            
             # Update the display
             pygame.display.flip()
 
         # Quit Pygame
         pygame.quit()
             
+    def check_image_click(self, mouse_pos):
+
+        if self.food_option1.rect.collidepoint(mouse_pos):
+            self.dancer.change_healthPoints(1)
+            print("Health points: ", self.dancer.healthPoints)
+        elif self.food_option2.rect.collidepoint(mouse_pos):
+            self.dancer.change_healthPoints(-1)
+            print("Health points: ", self.dancer.healthPoints)
+        elif self.food_option3.rect.collidepoint(mouse_pos):
+            self.dancer.change_healthPoints(1)
+
+        # elif self.practice_option1.rect.collidepoint(mouse_pos):
+        #     self.dancer.change_healthPoints(1)
+        #     print("Health points: ", self.dancer.healthPoints)
+        # elif self.practice_option2.rect.collidepoint(mouse_pos):
+        #     self.dancer.change_healthPoints(-1)
+        #     print("Health points: ", self.dancer.healthPoints)
+        # elif self.practice_option3.rect.collidepoint(mouse_pos):
+        #     self.dancer.change_healthPoints(1)
+    
 
 if __name__ == "__main__":
     game_instance = Game()

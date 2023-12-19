@@ -10,13 +10,9 @@ class FSM:
 
 
     def get_transition(self, num_points, state, direction):
-        # self.direction = direction
-        # self.current_state = state
         return self.state_transitions[(num_points, state, direction)]
 
     def process(self, num_points):
-        # self.current_state and self.direction need to have been updated
-
         my_tuple = self.get_transition(num_points, self.current_state, self.direction)
         
         action = my_tuple[0]

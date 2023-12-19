@@ -70,7 +70,6 @@ class Dancer(pygame.sprite.Sprite):
 
     # These four functions print the corresponding messages when the health/FSM state is changed
     def changeWEAK(self):
-        print("State should change to weak")
         self.weakImage = pygame.image.load("images/resultWEAK.png")
         self.resultWEAK = Options(self.screen, self.resultWEAK_rect, self.weakImage, 300, 550)
         print("Drawing weak image")
